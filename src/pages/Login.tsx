@@ -18,7 +18,21 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const registeredEmails = ["student@college.edu", "admin@college.edu", "faculty@college.edu"];
+  const registeredEmails = [
+    "student@college.edu",
+    "admin@college.edu",
+    "faculty@college.edu",
+    "rahul.sharma@gmail.com",
+    "priya.patel@yahoo.com",
+    "amit.kumar@outlook.com",
+    "sneha.reddy@gmail.com",
+    "vikram.singh@hotmail.com",
+    "ananya.das@gmail.com",
+    "rohan.mehta@yahoo.com",
+    "kavita.nair@outlook.com",
+    "arjun.gupta@gmail.com",
+    "deepika.joshi@yahoo.com",
+  ];
 
   const validate = () => {
     const newErrors: typeof errors = {};
@@ -129,7 +143,7 @@ const Login = () => {
               </Button>
 
               <div className="text-xs text-center text-muted-foreground space-y-1">
-                <p>Demo credentials: <strong>student@college.edu</strong> / <strong>password123</strong></p>
+                <p>Demo: <strong>rahul.sharma@gmail.com</strong> / <strong>password123</strong></p>
                 <p className="text-muted-foreground/60">Any valid email is accepted</p>
               </div>
             </form>
