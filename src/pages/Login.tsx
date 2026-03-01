@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { GraduationCap, Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const ALLOWED_DOMAIN = "@college.edu";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,8 +26,6 @@ const Login = () => {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "Enter a valid email address";
-    } else if (!email.toLowerCase().endsWith(ALLOWED_DOMAIN)) {
-      newErrors.email = `Only ${ALLOWED_DOMAIN} email addresses are allowed`;
     }
     if (!password) {
       newErrors.password = "Password is required";
@@ -132,7 +130,7 @@ const Login = () => {
 
               <div className="text-xs text-center text-muted-foreground space-y-1">
                 <p>Demo credentials: <strong>student@college.edu</strong> / <strong>password123</strong></p>
-                <p className="text-muted-foreground/60">Only @college.edu emails are accepted</p>
+                <p className="text-muted-foreground/60">Any valid email is accepted</p>
               </div>
             </form>
           </CardContent>
