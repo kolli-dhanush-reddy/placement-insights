@@ -52,7 +52,7 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div className="min-w-0">
-              <h2 className="text-sm font-bold font-display text-sidebar-foreground truncate">Placement Analyzer</h2>
+              <h2 className="text-sm font-bold font-display text-sidebar-foreground truncate">HireSight</h2>
               <p className="text-xs text-sidebar-foreground/50">College Dashboard</p>
             </div>
           )}
