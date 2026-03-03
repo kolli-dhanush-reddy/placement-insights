@@ -25,7 +25,7 @@ const DashboardLayout = ({ children, title, subtitle }: DashboardLayoutProps) =>
             {children}
           </main>
           <footer className="text-center text-xs text-muted-foreground py-4 border-t border-border">
-            © 2024 College Placement Trend Organizer
+            © 2024 HireSight
           </footer>
         </div>
       </div>

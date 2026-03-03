@@ -82,7 +82,7 @@ const Login = () => {
             <GraduationCap className="w-8 h-8 text-secondary" />
           </div>
           <h1 className="text-3xl font-bold font-display text-primary-foreground">
-            Placement Trend Organizer
+            HireSight
           </h1>
           <p className="text-primary-foreground/60 mt-2">Analyze. Predict. Succeed.</p>
         </div>
