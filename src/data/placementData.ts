@@ -1,11 +1,11 @@
 // ── Year-wise Placement ──
 export const yearWisePlacement = [
-  { year: "2019", placed: 320, unplaced: 180, percentage: 64 },
-  { year: "2020", placed: 280, unplaced: 220, percentage: 56 },
-  { year: "2021", placed: 350, unplaced: 150, percentage: 70 },
-  { year: "2022", placed: 410, unplaced: 90, percentage: 82 },
-  { year: "2023", placed: 430, unplaced: 70, percentage: 86 },
-  { year: "2024", placed: 455, unplaced: 45, percentage: 91 },
+  { year: "2019", placed: 427, unplaced: 173, percentage: 71, companiesVisited: 65, highestSalary: 10 },
+  { year: "2020", placed: 346, unplaced: 254, percentage: 58, companiesVisited: 37, highestSalary: 10 },
+  { year: "2021", placed: 868, unplaced: 132, percentage: 87, companiesVisited: 55, highestSalary: 30 },
+  { year: "2022", placed: 1048, unplaced: 152, percentage: 87, companiesVisited: 22, highestSalary: 21 },
+  { year: "2023", placed: 734, unplaced: 166, percentage: 82, companiesVisited: 32, highestSalary: 58 },
+  { year: "2024", placed: 634, unplaced: 166, percentage: 79, companiesVisited: 64, highestSalary: 25 },
 ];
 
 // ── Department-wise ──
@@ -34,12 +34,12 @@ export const topRecruiters = [
 
 // ── Salary Data ──
 export const salaryData = [
-  { year: "2019", min: 2.5, avg: 5.2, max: 18.0 },
-  { year: "2020", min: 2.2, avg: 4.8, max: 16.0 },
-  { year: "2021", min: 3.0, avg: 6.0, max: 22.0 },
-  { year: "2022", min: 3.5, avg: 7.2, max: 28.0 },
-  { year: "2023", min: 3.8, avg: 8.5, max: 35.0 },
-  { year: "2024", min: 4.0, avg: 9.2, max: 42.0 },
+  { year: "2019", min: 2.5, avg: 4.5, max: 10.0 },
+  { year: "2020", min: 2.2, avg: 4.2, max: 10.0 },
+  { year: "2021", min: 3.0, avg: 6.5, max: 30.0 },
+  { year: "2022", min: 3.5, avg: 7.0, max: 21.0 },
+  { year: "2023", min: 3.8, avg: 8.5, max: 58.0 },
+  { year: "2024", min: 4.0, avg: 8.0, max: 25.0 },
 ];
 
 // ── Rejection Reasons ──
