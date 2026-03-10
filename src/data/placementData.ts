@@ -20,16 +20,24 @@ export const departmentWise = [
 
 // ── Top Recruiters (summary) ──
 export const topRecruiters = [
-  { company: "TCS", hires: 85, avgPackage: 4.5 },
-  { company: "Infosys", hires: 62, avgPackage: 4.2 },
-  { company: "Wipro", hires: 48, avgPackage: 4.0 },
-  { company: "Google", hires: 8, avgPackage: 32.0 },
-  { company: "Microsoft", hires: 12, avgPackage: 24.5 },
-  { company: "Amazon", hires: 15, avgPackage: 22.0 },
-  { company: "Deloitte", hires: 28, avgPackage: 7.5 },
-  { company: "Accenture", hires: 42, avgPackage: 5.0 },
-  { company: "Cognizant", hires: 35, avgPackage: 4.8 },
-  { company: "Goldman Sachs", hires: 5, avgPackage: 28.0 },
+  { company: "Accenture", hires: 608, avgPackage: 4.8 },
+  { company: "Virtusa", hires: 497, avgPackage: 4.5 },
+  { company: "Capgemini", hires: 424, avgPackage: 4.1 },
+  { company: "Wipro", hires: 331, avgPackage: 4.2 },
+  { company: "TCS", hires: 286, avgPackage: 3.8 },
+  { company: "DXC Technology", hires: 188, avgPackage: 3.9 },
+  { company: "Tech Mahindra", hires: 117, avgPackage: 3.3 },
+  { company: "Cognizant", hires: 112, avgPackage: 4.0 },
+  { company: "Infosys", hires: 82, avgPackage: 4.0 },
+  { company: "HCL Technologies", hires: 74, avgPackage: 3.8 },
+  { company: "Epam Systems", hires: 53, avgPackage: 7.5 },
+  { company: "GlobalLogic", hires: 54, avgPackage: 2.2 },
+  { company: "PeopleTech", hires: 38, avgPackage: 3.3 },
+  { company: "Bosch Global Software", hires: 28, avgPackage: 5.5 },
+  { company: "Amadeus Labs", hires: 19, avgPackage: 10.5 },
+  { company: "Amazon", hires: 17, avgPackage: 14.0 },
+  { company: "Palo Alto Networks", hires: 3, avgPackage: 58.0 },
+  { company: "Walmart Global Tech", hires: 3, avgPackage: 24.0 },
 ];
 
 // ── Salary Data ──
