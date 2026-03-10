@@ -54,9 +54,9 @@ export const rejectionReasons = [
 
 // ── Prediction Data ──
 export const predictionData = [
-  { year: "2025", predicted: 93, confidence: 85 },
-  { year: "2026", predicted: 95, confidence: 72 },
-  { year: "2027", predicted: 96, confidence: 60 },
+  { year: "2025", predicted: 81, confidence: 88 },
+  { year: "2026", predicted: 84, confidence: 74 },
+  { year: "2027", predicted: 86, confidence: 58 },
 ];
 
 // ── Company Hiring Trend ──
