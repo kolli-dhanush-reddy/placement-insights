@@ -14,16 +14,159 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      prediction_data: {
+        Row: {
+          confidence: number
+          created_at: string
+          id: string
+          predicted: number
+          updated_at: string
+          year: string
+        }
+        Insert: {
+          confidence: number
+          created_at?: string
+          id?: string
+          predicted: number
+          updated_at?: string
+          year: string
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          id?: string
+          predicted?: number
+          updated_at?: string
+          year?: string
+        }
+        Relationships: []
+      }
+      salary_data: {
+        Row: {
+          avg_salary: number
+          created_at: string
+          id: string
+          max_salary: number
+          min_salary: number
+          updated_at: string
+          year: string
+        }
+        Insert: {
+          avg_salary: number
+          created_at?: string
+          id?: string
+          max_salary: number
+          min_salary: number
+          updated_at?: string
+          year: string
+        }
+        Update: {
+          avg_salary?: number
+          created_at?: string
+          id?: string
+          max_salary?: number
+          min_salary?: number
+          updated_at?: string
+          year?: string
+        }
+        Relationships: []
+      }
+      top_recruiters: {
+        Row: {
+          avg_package: number
+          company: string
+          created_at: string
+          hires: number
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avg_package: number
+          company: string
+          created_at?: string
+          hires: number
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          avg_package?: number
+          company?: string
+          created_at?: string
+          hires?: number
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      year_wise_placement: {
+        Row: {
+          companies_visited: number
+          created_at: string
+          highest_salary: number
+          id: string
+          percentage: number
+          placed: number
+          unplaced: number
+          updated_at: string
+          year: string
+        }
+        Insert: {
+          companies_visited?: number
+          created_at?: string
+          highest_salary?: number
+          id?: string
+          percentage: number
+          placed: number
+          unplaced: number
+          updated_at?: string
+          year: string
+        }
+        Update: {
+          companies_visited?: number
+          created_at?: string
+          highest_salary?: number
+          id?: string
+          percentage?: number
+          placed?: number
+          unplaced?: number
+          updated_at?: string
+          year?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +293,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
