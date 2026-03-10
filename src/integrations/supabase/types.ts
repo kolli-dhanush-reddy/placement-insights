@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      company_placements: {
+        Row: {
+          company: string
+          created_at: string
+          hires: number
+          id: string
+          job_role: string | null
+          salary_pa: number
+          updated_at: string
+          year: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          hires?: number
+          id?: string
+          job_role?: string | null
+          salary_pa?: number
+          updated_at?: string
+          year: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          hires?: number
+          id?: string
+          job_role?: string | null
+          salary_pa?: number
+          updated_at?: string
+          year?: string
+        }
+        Relationships: []
+      }
       prediction_data: {
         Row: {
           confidence: number
