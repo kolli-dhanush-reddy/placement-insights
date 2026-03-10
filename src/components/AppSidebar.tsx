@@ -2,13 +2,12 @@ import {
   LayoutDashboard,
   Building2,
   GitCompareArrows,
-  Brain,
   BookOpen,
   TrendingUp,
   XCircle,
   LogOut,
   GraduationCap,
-  ChevronLeft,
+  Shield,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -26,6 +25,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const mainItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -42,6 +42,7 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const { isAdmin, signOut } = useAuth();
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
@@ -83,6 +84,25 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              {isAdmin && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={currentPath === "/admin"}
+                    tooltip="Admin Panel"
+                  >
+                    <NavLink
+                      to="/admin"
+                      end
+                      className="hover:bg-sidebar-accent/50"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                    >
+                      <Shield className="h-4 w-4" />
+                      {!collapsed && <span>Admin Panel</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -93,7 +113,10 @@ export function AppSidebar() {
           variant="ghost"
           size="sm"
           className="w-full justify-start text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
-          onClick={() => navigate("/")}
+          onClick={async () => {
+            await signOut();
+            navigate("/");
+          }}
         >
           <LogOut className="h-4 w-4" />
           {!collapsed && <span className="ml-2">Logout</span>}
