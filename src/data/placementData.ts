@@ -34,12 +34,12 @@ export const topRecruiters = [
 
 // ── Salary Data ──
 export const salaryData = [
-  { year: "2019", min: 2.5, avg: 5.2, max: 18.0 },
-  { year: "2020", min: 2.2, avg: 4.8, max: 16.0 },
-  { year: "2021", min: 3.0, avg: 6.0, max: 22.0 },
-  { year: "2022", min: 3.5, avg: 7.2, max: 28.0 },
-  { year: "2023", min: 3.8, avg: 8.5, max: 35.0 },
-  { year: "2024", min: 4.0, avg: 9.2, max: 42.0 },
+  { year: "2019", min: 2.5, avg: 4.5, max: 10.0 },
+  { year: "2020", min: 2.2, avg: 4.2, max: 10.0 },
+  { year: "2021", min: 3.0, avg: 6.5, max: 30.0 },
+  { year: "2022", min: 3.5, avg: 7.0, max: 21.0 },
+  { year: "2023", min: 3.8, avg: 8.5, max: 58.0 },
+  { year: "2024", min: 4.0, avg: 8.0, max: 25.0 },
 ];
 
 // ── Rejection Reasons ──
