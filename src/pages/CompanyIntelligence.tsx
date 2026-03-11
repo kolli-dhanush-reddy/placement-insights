@@ -210,7 +210,26 @@ const CompanyIntelligence = () => {
         .sort((a, b) => a.year.localeCompare(b.year));
     }
 
-    return Array.from(map.values()).sort((a, b) => b.totalHires - a.totalHires);
+    // Composite ranking: normalize each metric to 0-1 range, then weighted sum
+    const all = Array.from(map.values());
+    const maxHires = Math.max(...all.map(c => c.totalHires), 1);
+    const maxAvg = Math.max(...all.map(c => c.avgSalary), 1);
+    const maxMax = Math.max(...all.map(c => c.maxSalary), 1);
+    const maxYears = Math.max(...all.map(c => c.yearsActive.length), 1);
+    const maxRoles = Math.max(...all.map(c => c.roles.length), 1);
+    const maxAvgHiresPerYear = Math.max(...all.map(c => c.totalHires / (c.yearsActive.length || 1)), 1);
+
+    const score = (c: CompanySummary) => {
+      const normAvgSalary = c.avgSalary / maxAvg;
+      const normMaxSalary = c.maxSalary / maxMax;
+      const normHiresPerYear = (c.totalHires / (c.yearsActive.length || 1)) / maxAvgHiresPerYear;
+      const normYears = c.yearsActive.length / maxYears;
+      const normRoles = c.roles.length / maxRoles;
+      // Weights: avg salary 30%, max salary 25%, hires/year 25%, consistency 10%, role diversity 10%
+      return normAvgSalary * 0.30 + normMaxSalary * 0.25 + normHiresPerYear * 0.25 + normYears * 0.10 + normRoles * 0.10;
+    };
+
+    return all.sort((a, b) => score(b) - score(a));
   }, [placements]);
 
   const years = useMemo(() => {
