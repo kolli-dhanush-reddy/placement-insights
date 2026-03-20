@@ -617,6 +617,122 @@ const PredictionsTab = () => {
   );
 };
 
+// ── User Roles Management Tab ──
+const UserRolesTab = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  const { data: roles = [] } = useQuery({
+    queryKey: ["user_roles"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("user_roles").select("*");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("user_roles").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user_roles"] });
+      toast({ title: "Admin role removed" });
+      setDeleteId(null);
+    },
+    onError: (e: any) => toast({ title: "Error", description: e.message, variant: "destructive" }),
+  });
+
+  const handleGrant = async () => {
+    if (!email.trim()) return;
+    setLoading(true);
+    try {
+      // Look up user by email via edge function
+      const { data: userData, error: fnError } = await supabase.functions.invoke("get-user-by-email", {
+        body: { email: email.trim() },
+      });
+      if (fnError) throw new Error(fnError.message || "Failed to look up user");
+      if (userData?.error) throw new Error(userData.error);
+
+      const userId = userData.id;
+
+      // Check if already admin
+      const existing = roles.find(r => r.user_id === userId && r.role === "admin");
+      if (existing) {
+        toast({ title: "Already an admin", description: `${email} already has admin role.` });
+        setLoading(false);
+        return;
+      }
+
+      const { error } = await supabase.from("user_roles").insert({ user_id: userId, role: "admin" as const });
+      if (error) throw error;
+
+      queryClient.invalidateQueries({ queryKey: ["user_roles"] });
+      toast({ title: "Admin role granted", description: `${email} is now an admin.` });
+      setEmail("");
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, variant: "destructive" });
+    }
+    setLoading(false);
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg flex items-center gap-2"><Users className="w-5 h-5" /> User Roles</CardTitle>
+        <CardDescription>Grant or revoke admin access by email address</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Enter user email..."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleGrant()}
+            className="max-w-sm"
+          />
+          <Button onClick={handleGrant} disabled={loading || !email.trim()}>
+            <Shield className="w-4 h-4 mr-1" /> {loading ? "Granting..." : "Grant Admin"}
+          </Button>
+        </div>
+
+        <div className="rounded-md border overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead>User ID</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead className="w-24 text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {roles.map((r) => (
+                <TableRow key={r.id} className="hover:bg-muted/30 transition-colors">
+                  <TableCell className="font-mono text-xs">{r.user_id}</TableCell>
+                  <TableCell><Badge>{r.role}</Badge></TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setDeleteId(r.id)}>
+                      <ShieldOff className="w-4 h-4 text-destructive" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {roles.length === 0 && (
+                <TableRow><TableCell colSpan={3} className="text-center text-muted-foreground py-8">No admin users found</TableCell></TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <DeleteConfirm open={!!deleteId} onClose={() => setDeleteId(null)} onConfirm={() => deleteId && remove.mutate(deleteId)} isPending={remove.isPending} />
+      </CardContent>
+    </Card>
+  );
+};
+
 // ── Main Admin Panel ──
 const AdminPanel = () => {
   const { isAdmin, loading } = useAuth();
@@ -633,12 +749,14 @@ const AdminPanel = () => {
           <TabsTrigger value="salary">Salary</TabsTrigger>
           <TabsTrigger value="recruiters">Recruiters</TabsTrigger>
           <TabsTrigger value="predictions">Predictions</TabsTrigger>
+          <TabsTrigger value="users">User Roles</TabsTrigger>
         </TabsList>
         <TabsContent value="companies"><CompanyPlacementsTab /></TabsContent>
         <TabsContent value="placement"><YearPlacementTab /></TabsContent>
         <TabsContent value="salary"><SalaryTab /></TabsContent>
         <TabsContent value="recruiters"><RecruitersTab /></TabsContent>
         <TabsContent value="predictions"><PredictionsTab /></TabsContent>
+        <TabsContent value="users"><UserRolesTab /></TabsContent>
       </Tabs>
     </DashboardLayout>
   );
