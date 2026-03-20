@@ -625,11 +625,21 @@ const UserRolesTab = () => {
   const [loading, setLoading] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
+  const [emailMap, setEmailMap] = useState<Record<string, string>>({});
+
   const { data: roles = [] } = useQuery({
     queryKey: ["user_roles"],
     queryFn: async () => {
       const { data, error } = await supabase.from("user_roles").select("*");
       if (error) throw error;
+      // Resolve emails for all user IDs
+      if (data && data.length > 0) {
+        const userIds = data.map(r => r.user_id);
+        const { data: emailData } = await supabase.functions.invoke("get-user-by-email", {
+          body: { user_ids: userIds },
+        });
+        if (emailData?.emails) setEmailMap(emailData.emails);
+      }
       return data;
     },
   });
@@ -704,6 +714,7 @@ const UserRolesTab = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
+                <TableHead>Email</TableHead>
                 <TableHead>User ID</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead className="w-24 text-right">Actions</TableHead>
@@ -712,7 +723,8 @@ const UserRolesTab = () => {
             <TableBody>
               {roles.map((r) => (
                 <TableRow key={r.id} className="hover:bg-muted/30 transition-colors">
-                  <TableCell className="font-mono text-xs">{r.user_id}</TableCell>
+                  <TableCell className="text-sm">{emailMap[r.user_id] || "Loading..."}</TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">{r.user_id}</TableCell>
                   <TableCell><Badge>{r.role}</Badge></TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setDeleteId(r.id)}>
@@ -722,7 +734,7 @@ const UserRolesTab = () => {
                 </TableRow>
               ))}
               {roles.length === 0 && (
-                <TableRow><TableCell colSpan={3} className="text-center text-muted-foreground py-8">No admin users found</TableCell></TableRow>
+                <TableRow><TableCell colSpan={4} className="text-center text-muted-foreground py-8">No admin users found</TableCell></TableRow>
               )}
             </TableBody>
           </Table>

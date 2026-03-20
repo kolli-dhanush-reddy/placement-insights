@@ -12,7 +12,6 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Verify caller is admin
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -24,7 +23,6 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    // Verify the calling user is admin using their JWT
     const anonClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -36,7 +34,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Check admin role
     const adminClient = createClient(supabaseUrl, serviceRoleKey);
     const { data: roleData } = await adminClient
       .from("user_roles")
@@ -52,30 +49,44 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { email } = await req.json();
-    if (!email) {
-      return new Response(JSON.stringify({ error: "Email is required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    const body = await req.json();
+
+    // Mode 1: Look up single user by email
+    if (body.email) {
+      const { data: { users }, error } = await adminClient.auth.admin.listUsers();
+      if (error) throw error;
+      const found = users.find((u) => u.email?.toLowerCase() === body.email.toLowerCase());
+      if (!found) {
+        return new Response(JSON.stringify({ error: "User not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      return new Response(
+        JSON.stringify({ id: found.id, email: found.email }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
-    // Look up user by email using admin API
-    const { data: { users }, error } = await adminClient.auth.admin.listUsers();
-    if (error) throw error;
-
-    const found = users.find((u) => u.email?.toLowerCase() === email.toLowerCase());
-    if (!found) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
-        status: 404,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    // Mode 2: Resolve emails for a list of user IDs
+    if (body.user_ids && Array.isArray(body.user_ids)) {
+      const { data: { users }, error } = await adminClient.auth.admin.listUsers();
+      if (error) throw error;
+      const emailMap: Record<string, string> = {};
+      for (const uid of body.user_ids) {
+        const found = users.find((u) => u.id === uid);
+        emailMap[uid] = found?.email || "Unknown";
+      }
+      return new Response(
+        JSON.stringify({ emails: emailMap }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
-    return new Response(
-      JSON.stringify({ id: found.id, email: found.email }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: "Provide email or user_ids" }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (e) {
     return new Response(JSON.stringify({ error: e.message }), {
       status: 500,
