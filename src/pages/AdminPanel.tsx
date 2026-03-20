@@ -625,11 +625,21 @@ const UserRolesTab = () => {
   const [loading, setLoading] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
+  const [emailMap, setEmailMap] = useState<Record<string, string>>({});
+
   const { data: roles = [] } = useQuery({
     queryKey: ["user_roles"],
     queryFn: async () => {
       const { data, error } = await supabase.from("user_roles").select("*");
       if (error) throw error;
+      // Resolve emails for all user IDs
+      if (data && data.length > 0) {
+        const userIds = data.map(r => r.user_id);
+        const { data: emailData } = await supabase.functions.invoke("get-user-by-email", {
+          body: { user_ids: userIds },
+        });
+        if (emailData?.emails) setEmailMap(emailData.emails);
+      }
       return data;
     },
   });
