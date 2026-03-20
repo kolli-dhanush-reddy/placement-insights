@@ -714,6 +714,7 @@ const UserRolesTab = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
+                <TableHead>Email</TableHead>
                 <TableHead>User ID</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead className="w-24 text-right">Actions</TableHead>
@@ -722,7 +723,8 @@ const UserRolesTab = () => {
             <TableBody>
               {roles.map((r) => (
                 <TableRow key={r.id} className="hover:bg-muted/30 transition-colors">
-                  <TableCell className="font-mono text-xs">{r.user_id}</TableCell>
+                  <TableCell className="text-sm">{emailMap[r.user_id] || "Loading..."}</TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">{r.user_id}</TableCell>
                   <TableCell><Badge>{r.role}</Badge></TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setDeleteId(r.id)}>
@@ -732,7 +734,7 @@ const UserRolesTab = () => {
                 </TableRow>
               ))}
               {roles.length === 0 && (
-                <TableRow><TableCell colSpan={3} className="text-center text-muted-foreground py-8">No admin users found</TableCell></TableRow>
+                <TableRow><TableCell colSpan={4} className="text-center text-muted-foreground py-8">No admin users found</TableCell></TableRow>
               )}
             </TableBody>
           </Table>
